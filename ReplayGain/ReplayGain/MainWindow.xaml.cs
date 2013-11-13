@@ -29,16 +29,18 @@ namespace ReplayGain
 
         private void SelectFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            if (dialog.ShowDialog() == true) // user clicked OK button
+            //OpenFileDialog dialog = new OpenFileDialog();
+            //if (dialog.ShowDialog() == true) // user clicked OK button
+            //{
+            //    string filePath = dialog.FileName;
+            //    FileList.ItemsSource = new DirectoryInfo(filePath).GetFiles("*.*");
+            //} 
+            string filePath = @"c:\MyMusic";
+            string[] fileList = Directory.GetFiles(filePath,"*.*");
+            foreach (string s in fileList)
             {
-                string filePath = dialog.FileName;
-                FileList.ItemsSource = new DirectoryInfo(filePath).GetFiles("*.*");
-                //foreach (FileInfo f in directoryFiles)
-                //{
-                //    FileList.ItemsSource = new DirectoryInfo(filePath).GetFiles("*.*");
-                //}
-            } 
+                FileList.Items.Add(s);
+            }
         }
     }
 }
