@@ -29,18 +29,22 @@ namespace ReplayGain
 
         private void SelectFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            //OpenFileDialog dialog = new OpenFileDialog();
-            //if (dialog.ShowDialog() == true) // user clicked OK button
-            //{
-            //    string filePath = dialog.FileName;
-            //    FileList.ItemsSource = new DirectoryInfo(filePath).GetFiles("*.*");
-            //} 
-            string filePath = @"c:\MyMusic";
-            string[] fileList = Directory.GetFiles(filePath,"*.*");
-            foreach (string s in fileList)
-            {
-                FileList.Items.Add(s);
-            }
+            OpenFileDialog dialog = new OpenFileDialog();
+            System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderDialog.RootFolder = Environment.SpecialFolder.Desktop;
+            folderDialog.ShowDialog();
+            string curDirectory = folderDialog.SelectedPath;
+            FileList.ItemsSource = new DirectoryInfo(curDirectory).GetFiles("*.mp3",SearchOption.AllDirectories);
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileList.ItemsSource = string.Empty;
+        }
+
+        private void ReplayGainButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

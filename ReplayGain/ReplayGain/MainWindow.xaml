@@ -28,8 +28,8 @@
 
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" >
             <TextBox Name ="ReplayGainLevel" Text="89" IsReadOnly="True"/>
-            <Button Content="ReplayGain" Name="ReplayGainButton" />
-            <Button Content="Clear" Name="ClearButton" />
+            <Button Content="ReplayGain" Name="ReplayGainButton" Click="ReplayGainButton_Click" />
+            <Button Content="Clear" Name="ClearButton" Click="ClearButton_Click" />
             <Button  Content="Select Folder" Name="SelectFolderButton" Click="SelectFolderButton_Click"/>
         </StackPanel>
 
