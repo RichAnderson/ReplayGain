@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace ReplayGain
             try
             { 
                 var files = Directory.EnumerateFiles(curDirectory, "*.mp3",SearchOption.AllDirectories);
-                FileList.ItemsSource = files;
+                //FileList.ItemsSource = files;
                 foreach (var f in files)
                 {
                     filePaths.Add(f.ToString());
@@ -55,6 +56,8 @@ namespace ReplayGain
             {
                 Console.WriteLine(PathEx.Message);
             }
+            FileList.ItemsSource = (from s in filePaths
+                                    select s.ToString()).Distinct();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -87,11 +90,18 @@ namespace ReplayGain
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             //use openfiledialog to select an m3u file and pass path to Kurts class/method.
+            ArrayList array1 = new ArrayList();
             OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == true) // user clicked OK button
             {
                 string filePath = dialog.FileName;
-            } 
+                foreach (var el in array1)
+                {
+                    filePaths.Add(el.ToString());
+                }
+                FileList.ItemsSource = (from s in filePaths
+                                        select s.ToString()).Distinct();
+            }
         }
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
