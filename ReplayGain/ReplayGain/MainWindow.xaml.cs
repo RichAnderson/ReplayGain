@@ -58,6 +58,7 @@ namespace ReplayGain
             }
             FileList.ItemsSource = (from s in filePaths
                                     select s.ToString()).Distinct();
+            FileList.SelectAll();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -67,7 +68,7 @@ namespace ReplayGain
 
         private void ReplayGainButton_Click(object sender, RoutedEventArgs e)
         {
-            var itemsSource = FileList.ItemsSource as IEnumerable<string>;
+            List<string> selectedFiles = new List<string>();
             if (FileList.ItemsSource != null)
             {
                 foreach (var item in FileList.ItemsSource)
@@ -75,10 +76,15 @@ namespace ReplayGain
                     var row = FileList.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
                     if (row != null) 
                     {
-                        MessageBox.Show(row.Item.ToString());
+                        if (row.IsSelected)
+                        {
+                            selectedFiles.Add(row.Item.ToString());
+                        }
                     }
                 }
             }
+            mp3GainInterface mp3Gain = new mp3GainInterface();
+            mp3Gain.runMp3Gain(selectedFiles, mp3GainInterface.GainType.Album);
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
@@ -95,12 +101,68 @@ namespace ReplayGain
             if (dialog.ShowDialog() == true) // user clicked OK button
             {
                 string filePath = dialog.FileName;
-                foreach (var el in array1)
+                foreach (var el in ParsM3UFile(filePath))
                 {
                     filePaths.Add(el.ToString());
                 }
                 FileList.ItemsSource = (from s in filePaths
                                         select s.ToString()).Distinct();
+                FileList.SelectAll();
+            }
+        }
+
+        private static List<string> ParsM3UFile(string basePath)
+        {
+            List<string> songFilePaths = new List<String>();
+            try
+            {
+                bool isPathCorrect;
+                isPathCorrect = File.Exists(basePath);
+
+                //If path Fails return an empty list
+                if (isPathCorrect == false)
+                {
+                    return new List<String>();
+                }
+                //If path is verified, pars the m3u file
+                else
+                {
+                    using (StreamReader reader = new StreamReader(basePath))
+                    {
+                        string line;
+                        while (( line = reader.ReadLine() ) != null)
+                        {
+
+                            // string mp3File = getMP3file(line);
+                            bool ifFilePath = File.Exists(line);
+                            if (ifFilePath == true)
+                            {
+                                songFilePaths.Add(line);
+                            }
+                            else
+                            {
+                                //Check to see if the path can be found. 
+                                string directory = System.IO.Path.GetDirectoryName(basePath);
+                                if (File.Exists(directory + line))
+                                {
+                                    songFilePaths.Add(directory + line);
+                                }
+                            }
+                        }
+                        reader.Close();
+
+
+                        return songFilePaths;
+                    }
+                }
+            }
+
+            catch (Exception)
+            {
+                Console.WriteLine("\n\nWell this is embarrassing.\nSomething went wrong, please try again.");
+                Console.ReadKey();
+                Environment.Exit(0);
+                return new List<string>();
             }
         }
 

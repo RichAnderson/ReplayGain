@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace MP3Gain
+namespace ReplayGain
 {
 
     class mp3GainInterface
