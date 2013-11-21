@@ -9,10 +9,15 @@ namespace ReplayGain
 
     class mp3GainInterface
     {
-        public enum GainType { Track, Album }
-        public void runMp3Gain(List<String> list, GainType gainType = GainType.Track)
+        public enum GainType { Track, Album, Constant }
+        public void runMp3Gain(List<String> list, GainType gainType = GainType.Track, double gain = 89)
         {
             StringBuilder sb = new StringBuilder();
+
+            if (gain > 255 || gain < 0)
+            {
+                throw new ArgumentOutOfRangeException("Gain must be 0-255");
+            }
 
             switch (gainType)
             {
@@ -21,6 +26,9 @@ namespace ReplayGain
                     break;
                 case GainType.Album:
                     sb.Append(" /a ");
+                    break;
+                case GainType.Constant:
+                    sb.Append(String.Format(" /g {0} /c ", gain));
                     break;
             }
 
@@ -37,7 +45,7 @@ namespace ReplayGain
             try
             {
                 mp3GainProcess.StartInfo.UseShellExecute = false;
-                mp3GainProcess.StartInfo.CreateNoWindow = false;
+                mp3GainProcess.StartInfo.CreateNoWindow = false; //Change to true to hide the window
                 mp3GainProcess.StartInfo.FileName = "mp3gain\\mp3gain.exe";
                 mp3GainProcess.StartInfo.Arguments = sb.ToString();
                 mp3GainProcess.Start();
