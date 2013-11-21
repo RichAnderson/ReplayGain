@@ -29,6 +29,9 @@ namespace ReplayGain
         List<string> filePaths = new List<string>();
         DoubleCollection tickMarks = new DoubleCollection();
         mp3GainInterface.GainType gainType = mp3GainInterface.GainType.Track;
+        bool track = false;
+        bool album = false;
+        string helpDialog = string.Empty;
 
         public MainWindow()
         {
@@ -88,13 +91,26 @@ namespace ReplayGain
                 }
             }
             mp3GainInterface mp3Gain = new mp3GainInterface();
-            mp3Gain.runMp3Gain(selectedFiles, gainType);
+            if (track == true)
+            {
+                mp3Gain.runMp3Gain(selectedFiles, mp3GainInterface.GainType.Track);
+            }
+            else if (album == true)
+            {
+                mp3Gain.runMp3Gain(selectedFiles, mp3GainInterface.GainType.Album);
+            }
+            else
+            {
+                mp3Gain.runMp3Gain(selectedFiles, mp3GainInterface.GainType.Track, Convert.ToDouble(tickSlider.Value));
+            }
         }
 
-        private void Button_Settings_Click(object sender, RoutedEventArgs e)
+        private void Button_Helper_Click(object sender, RoutedEventArgs e)
         {
-            Settings settings = new Settings();
-            settings.Show();
+            helpDialog = "There are three options for replaygain.\n\n Track: All tracks will be set to the same decibel level of 89.\n\n Album: All tracks will maintain their individual differences while all tracks are adjusted.\n\n Custom: All tracks will be adjusted to the selected decibel value.";
+            Help helper = new Help();
+            helper.HelpDialog.Text = helpDialog;
+            helper.Show();
         }
 
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
@@ -179,22 +195,28 @@ namespace ReplayGain
             if (TrackRadioButton.IsChecked == true)
             {
                 //tickSlider.IsEnabled = false;
+                track = true;
+                album = false;
                 gainType = mp3GainInterface.GainType.Track;
             }
             else if (AlbumRadioButton.IsChecked == true)
             {
                 //tickSlider.IsEnabled = false;
+                album = true;
+                track = false;
                 gainType = mp3GainInterface.GainType.Album;
             }
             else if (CustomRadioButton.IsChecked == true)
             {
+                track = false;
+                album = false;
+
                 tickSlider.IsEnabled = true;
                 for (int i = 74; i <= 104; i++)
                 {
                     tickMarks.Add(i);
                 }
                 tickSlider.Ticks = tickMarks;
-
             }
         }
 
