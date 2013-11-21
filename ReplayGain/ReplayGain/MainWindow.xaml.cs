@@ -27,6 +27,8 @@ namespace ReplayGain
     public partial class MainWindow : Window
     {
         List<string> filePaths = new List<string>();
+        DoubleCollection tickMarks = new DoubleCollection();
+        mp3GainInterface.GainType gainType;
 
         public MainWindow()
         {
@@ -58,7 +60,6 @@ namespace ReplayGain
             }
             FileList.ItemsSource = (from s in filePaths
                                     select s.ToString()).Distinct();
-            FileList.SelectAll();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
@@ -107,7 +108,6 @@ namespace ReplayGain
                 }
                 FileList.ItemsSource = (from s in filePaths
                                         select s.ToString()).Distinct();
-                FileList.SelectAll();
             }
         }
 
@@ -169,6 +169,50 @@ namespace ReplayGain
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void ReplayOptionGroup_Checked(object sender, RoutedEventArgs e)
+        {
+            //Slider tempSlider = new Slider();
+            //tempSlider.Orientation = Orientation.Horizontal;
+            //tempSlider.AutoToolTipPlacement = System.Windows.Controls.Primitives.AutoToolTipPlacement.BottomRight;
+            //tempSlider.AutoToolTipPrecision = 2;
+            //tempSlider.IsDirectionReversed = true;
+            //tempSlider.Width = 100;
+            //tempSlider.Value = 89;
+            //tempSlider.Maximum = 104;
+            //tempSlider.Minimum = 74;
+            //tempSlider.LargeChange = 1;
+            //tempSlider.SmallChange = 1;
+            //tempSlider.IsMoveToPointEnabled = false;
+            //tempSlider.SelectionStart = 74;
+            //tempSlider.SelectionEnd = 104;
+            //tempSlider.IsSelectionRangeEnabled = false;
+            //tempSlider.IsSnapToTickEnabled = true;
+            //tempSlider.TickFrequency = 3;
+            //tempSlider.Ticks = tickMarks;
+            //tempSlider.TickPlacement = System.Windows.Controls.Primitives.TickPlacement.BottomRight;
+            //tickSlider = tempSlider;
+
+            if (TrackRadioButton.IsChecked == true)
+            {
+                //tickSlider.IsEnabled = false;
+                gainType = mp3GainInterface.GainType.Track;
+            }
+            else if (AlbumRadioButton.IsChecked == true)
+            {
+                //tickSlider.IsEnabled = false;
+                gainType = mp3GainInterface.GainType.Album;
+            }
+            else if (CustomRadioButton.IsChecked == true)
+            {
+                tickSlider.IsEnabled = true;
+                for (int i = 74; i <= 104; i++)
+                {
+                    tickMarks.Add(i);
+                }
+                tickSlider.Ticks = tickMarks;
+            }
         }
     }
 }
