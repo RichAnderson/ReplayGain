@@ -28,7 +28,7 @@ namespace ReplayGain
     {
         List<string> filePaths = new List<string>();
         DoubleCollection tickMarks = new DoubleCollection();
-        mp3GainInterface.GainType gainType;
+        mp3GainInterface.GainType gainType = mp3GainInterface.GainType.Track;
 
         public MainWindow()
         {
@@ -72,20 +72,23 @@ namespace ReplayGain
             List<string> selectedFiles = new List<string>();
             if (FileList.ItemsSource != null)
             {
+                bool isSelected = false;
                 foreach (var item in FileList.ItemsSource)
                 {
                     var row = FileList.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                    if (row != null) 
+                    if (row != null && row.IsSelected) 
                     {
-                        if (row.IsSelected)
-                        {
-                            selectedFiles.Add(row.Item.ToString());
-                        }
+                        isSelected = true;
+                        selectedFiles.Add(row.Item.ToString());
                     }
+                }
+                if (isSelected == false)
+                {
+                    MessageBox.Show("Please select at least one row...");
                 }
             }
             mp3GainInterface mp3Gain = new mp3GainInterface();
-            mp3Gain.runMp3Gain(selectedFiles, mp3GainInterface.GainType.Album);
+            mp3Gain.runMp3Gain(selectedFiles, gainType);
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
@@ -97,7 +100,6 @@ namespace ReplayGain
         private void AddPlaylistButton_Click(object sender, RoutedEventArgs e)
         {
             //use openfiledialog to select an m3u file and pass path to Kurts class/method.
-            ArrayList array1 = new ArrayList();
             OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == true) // user clicked OK button
             {
@@ -173,26 +175,6 @@ namespace ReplayGain
 
         private void ReplayOptionGroup_Checked(object sender, RoutedEventArgs e)
         {
-            //Slider tempSlider = new Slider();
-            //tempSlider.Orientation = Orientation.Horizontal;
-            //tempSlider.AutoToolTipPlacement = System.Windows.Controls.Primitives.AutoToolTipPlacement.BottomRight;
-            //tempSlider.AutoToolTipPrecision = 2;
-            //tempSlider.IsDirectionReversed = true;
-            //tempSlider.Width = 100;
-            //tempSlider.Value = 89;
-            //tempSlider.Maximum = 104;
-            //tempSlider.Minimum = 74;
-            //tempSlider.LargeChange = 1;
-            //tempSlider.SmallChange = 1;
-            //tempSlider.IsMoveToPointEnabled = false;
-            //tempSlider.SelectionStart = 74;
-            //tempSlider.SelectionEnd = 104;
-            //tempSlider.IsSelectionRangeEnabled = false;
-            //tempSlider.IsSnapToTickEnabled = true;
-            //tempSlider.TickFrequency = 3;
-            //tempSlider.Ticks = tickMarks;
-            //tempSlider.TickPlacement = System.Windows.Controls.Primitives.TickPlacement.BottomRight;
-            //tickSlider = tempSlider;
 
             if (TrackRadioButton.IsChecked == true)
             {
@@ -212,6 +194,20 @@ namespace ReplayGain
                     tickMarks.Add(i);
                 }
                 tickSlider.Ticks = tickMarks;
+
+            }
+        }
+
+        private void SelectGroup_Checked(object sender, RoutedEventArgs e)
+        {
+            if (SelectAllRadioButton.IsChecked == true)
+            {
+                FileList.SelectAll();
+            }
+
+            if (UnSelectAllRadioButton.IsChecked == true)
+            {
+                FileList.UnselectAll();
             }
         }
     }
