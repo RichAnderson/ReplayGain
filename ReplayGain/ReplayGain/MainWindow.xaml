@@ -16,6 +16,9 @@
         <Style TargetType="StackPanel" >
             <Setter Property="Margin" Value="0 5 0 5" />
         </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Margin" Value="0 0 20 0"/>
+        </Style>
     </Window.Resources>
 
     <Window.Background>
@@ -48,26 +51,25 @@
             </Menu>
         </StackPanel>
         <Label DockPanel.Dock="Top" Content="ReplayGain Adjustment:" Style="{StaticResource titelLabel}" />
-
         <StackPanel Name="ButtonPnl" DockPanel.Dock="Top" Orientation="Horizontal" >
-            <TextBox Name ="ReplayGainLevel" Text="89" IsReadOnly="True" Margin="5"/>
             <Button Content="ReplayGain" Name="ReplayGainButton" Click="ReplayGainButton_Click" />
             <Button Content="Select Folder" Name="SelectFolderButton" Click="SelectFolderButton_Click"/>
             <Button Content="Add Playlist" Name="AddPlaylistButton" Click="AddPlaylistButton_Click"/>
             <Button Content="Clear" Name="ClearButton" Click="ClearButton_Click" />
         </StackPanel>
-
+        <StackPanel Name="ReplayOptions" DockPanel.Dock="Top" Orientation="Horizontal">
+            <RadioButton Name="TrackRadioButton" GroupName="ReplayOptionGroup" Content="Track" IsChecked="True" Checked="ReplayOptionGroup_Checked"/>
+            <RadioButton Name="AlbumRadioButton" GroupName="ReplayOptionGroup" Content="Album" Checked="ReplayOptionGroup_Checked"/>
+            <RadioButton Name="CustomRadioButton" GroupName="ReplayOptionGroup" Content="Customize" Checked="ReplayOptionGroup_Checked"/>
+            <Slider Name="tickSlider" Width="100" Value="89" Orientation="Horizontal" HorizontalAlignment="Left" 
+                IsSnapToTickEnabled="True" Maximum="104" TickPlacement="BottomRight" KeyboardNavigation.IsTabStop="False"
+                AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" IsDirectionReversed="True" Minimum="74" SmallChange="1" SelectionStart="74" SelectionEnd="104" IsSelectionRangeEnabled="True"/>
+        </StackPanel>
         <Label DockPanel.Dock="Top" Content="Folder Content:" />
-
-        <Label DockPanel.Dock="Bottom" Name="StatusLb" Content="" Height="68" />
-        
         <DataGrid x:Name="FileList" AutoGenerateColumns="False" >     
             <DataGrid.Columns>
                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding}" Header="Name"/>
             </DataGrid.Columns>
         </DataGrid>
-
-        <!--<TextBox Name="ContentTb" TextWrapping="Wrap" AcceptsReturn="true" VerticalScrollBarVisibility="Auto" 
-                 Style="{StaticResource ContentTbStyle}" />-->
     </DockPanel>
 </Window>
