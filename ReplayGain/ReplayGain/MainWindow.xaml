@@ -37,11 +37,11 @@
                             <Image Source="Images/floppy-disk.png"/>
                         </MenuItem.Icon>
                     </MenuItem>-->
-                    <!--<MenuItem Header="_Settings" Click="Button_Settings_Click">
+                    <MenuItem Header="_Help" Click="Button_Helper_Click">
                         <MenuItem.Icon>
-                            <Image Source="Images/applications.png" />
+                            <Image Source="Images/AdobeHelpCenter.png" />
                         </MenuItem.Icon>
-                    </MenuItem>-->
+                    </MenuItem>
                     <MenuItem Header="_Close" Click="Button_Close_Click">
                         <MenuItem.Icon>
                             <Image Source="Images/social_aim.png"/>
@@ -64,6 +64,7 @@
             <Slider Name="tickSlider" Width="100" Value="89" Orientation="Horizontal" HorizontalAlignment="Left" 
                 IsSnapToTickEnabled="True" Maximum="104" TickPlacement="BottomRight" KeyboardNavigation.IsTabStop="False"
                 AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" IsDirectionReversed="True" Minimum="74" SmallChange="1" SelectionStart="74" SelectionEnd="104" IsSelectionRangeEnabled="True" IsEnabled="False"/>
+            <Button Content="?" Name="HelpButton" Click="Button_Helper_Click" Margin="25 0 0 0" />
         </StackPanel>
         <Grid Name="LabelAndSelect" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
